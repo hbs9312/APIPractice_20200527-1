@@ -5,6 +5,8 @@ import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,24 @@ public class UserListActivity extends BaseActivity {
     @Override
     public void setupEvents() {
 
+//        사람 중 한명을 누르면
+//        /user_check의 POST 메소드로 호출.
+
+        binding.userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                User clickedUser = users.get(position);
+
+                ServerUtil.postRequestUserCheck(mContext, clickedUser.getId(), new ServerUtil.JsonResponseHandler() {
+                    @Override
+                    public void onResponse(JSONObject json) {
+                        Log.d("찔러보기응답", json.toString());
+                    }
+                });
+
+            }
+        });
     }
 
     @Override
